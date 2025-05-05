@@ -72,17 +72,6 @@ The application will be available at http://localhost:8000
 - **POST /auth/signup** - Create a new user account
 - **POST /auth/login** - Authenticate and receive JWT token
 
-## 📦 Deployment
-
-The application is deployed on Render.com. For your own deployment:
-
-1. Push your code to GitHub
-2. Connect your repository to Render.com
-3. Configure the following:
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn app:app --host 0.0.0.0 --port $PORT`
-   - Environment Variables: Add your `OPENAI_API_KEY` and `JWT_SECRET`
-
 ## 📝 Notes
 
 - The vector database (ChromaDB) is stored locally in the `chroma/` directory
