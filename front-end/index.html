@@ -672,12 +672,17 @@
 				
 				const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 				
+				// Format the message with proper line breaks and markdown
+				const formattedMessage = sender === 'bot' 
+					? formatBotMessage(message)
+					: message;
+				
 				li.innerHTML = `
 					<span class="chat-img">
 						<img src="vendors/images/${sender === 'user' ? 'Eben.png' : 'bot.png'}" alt="" />
 					</span>
 					<div class="chat-body clearfix">
-						<p${isError ? ' class="text-danger"' : ''}>${message}</p>
+						<div${isError ? ' class="text-danger"' : ''}>${formattedMessage}</div>
 						<div class="chat_time">${time}</div>
 					</div>
 				`;
@@ -687,6 +692,35 @@
 				// Scroll to bottom of chat
 				const chatDesc = document.querySelector('.chat-desc');
 				chatDesc.scrollTop = chatDesc.scrollHeight;
+			}
+			
+			// Function to format bot messages with proper styling
+			function formatBotMessage(text) {
+				// Replace markdown headings
+				text = text.replace(/### (.*?)$/gm, '<h3>$1</h3>');
+				text = text.replace(/## (.*?)$/gm, '<h2>$1</h2>');
+				text = text.replace(/# (.*?)$/gm, '<h1>$1</h1>');
+				
+				// Replace bullet points
+				text = text.replace(/- (.*?)$/gm, '<li>$1</li>');
+				
+				// Wrap bullet point lists in <ul> tags
+				if (text.includes('<li>')) {
+					text = text.replace(/(<li>.*?<\/li>)+/g, function(match) {
+						return '<ul>' + match + '</ul>';
+					});
+				}
+				
+				// Replace line breaks with <br> tags
+				text = text.replace(/\n/g, '<br>');
+				
+				// Bold text
+				text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+				
+				// Italic text
+				text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+				
+				return text;
 			}
 			
 			// Logout functionality
