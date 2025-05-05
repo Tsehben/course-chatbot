@@ -112,7 +112,7 @@ def _sync_llm_call(messages: List[Dict[str, str]]) -> str:
             model=MODEL_NAME,
             messages=messages,
             temperature=0,
-            max_tokens=256,
+            max_tokens=2048,
         )
         # new client returns object with .choices[0].message.content; old returns dict similar.
         choice = response.choices[0]
