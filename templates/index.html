@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Course Q&amp;A Chatbot</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <style>
+      body { max-width: 700px; margin: 2rem auto; }
+      #chat-box { white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Course Q&amp;A Chatbot</h1>
+
+    <form hx-post="/ask" hx-trigger="submit" hx-target="#chat-box" hx-swap="beforeend">
+      <label for="question">Ask a question:</label>
+      <input type="text" id="question" name="question" required />
+      <input type="hidden" name="session" id="session" />
+      <button type="submit">Send</button>
+    </form>
+
+    <section id="chat-box"></section>
+
+    <template id="response-template">
+      <div><strong>You:</strong> <span class="user-msg"></span></div>
+      <div><strong>Bot:</strong> <span class="bot-msg"></span></div>
+    </template>
+
+    <script>
+      // Intercept HTMX response to append nicely formatted chat exchanges
+      document.body.addEventListener('htmx:afterOnLoad', function(evt) {
+        const json = evt.detail.xhr.responseText;
+        let data;
+        try { data = JSON.parse(json); } catch(_) { return; }
+
+        const template = document.getElementById('response-template');
+        const clone = template.content.cloneNode(true);
+        clone.querySelector('.user-msg').textContent = evt.detail.parameters.question;
+        clone.querySelector('.bot-msg').textContent = data.answer;
+        document.getElementById('chat-box').appendChild(clone);
+        // Clear input
+        document.getElementById('question').value = '';
+
+        // store session id from server in case it's new
+        if (data.session) {
+          localStorage.setItem('chatbot_session', data.session);
+          document.getElementById('session').value = data.session;
+        }
+      });
+
+      // ensure session id persisted across requests
+      (function() {
+        const key = 'chatbot_session';
+        if (!localStorage.getItem(key)) {
+          // rudimentary uuid
+          localStorage.setItem(key, crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+        }
+        document.getElementById('session').value = localStorage.getItem(key);
+      })();
+    </script>
+  </body>
+</html>

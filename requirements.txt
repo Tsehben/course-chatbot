@@ -1,0 +1,15 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+langchain>=0.1.14
+openai>=1.10
+langchain-openai>=0.0.5
+langchain-community>=0.0.14
+tiktoken>=0.6.0
+textract>=1.6.5
+chromadb>=0.4.24
+python-magic>=0.4.27
+pydantic[dotenv]>=2.6.0
+passlib[bcrypt]>=1.7.4
+python-jose[cryptography]>=3.3.0
+python-multipart>=0.0.9
+email-validator>=2.1.1

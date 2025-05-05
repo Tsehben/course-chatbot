@@ -1,0 +1,11 @@
+.env
+materials/
+chroma/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+users.db
+.idea/
+.vscode/
