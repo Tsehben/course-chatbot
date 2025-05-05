@@ -63,7 +63,7 @@ A Retrieval-Augmented Generation (RAG) chatbot designed to answer questions abou
 uvicorn app:app --reload
 ```
 
-The application will be available at http://localhost:8000
+The application is available at https://course-chatbot-6pax.onrender.com/
 
 ## 🔄 API Endpoints
 
